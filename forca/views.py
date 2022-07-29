@@ -55,11 +55,13 @@ def generate(request):
 
 
 def randomize(request, pk):
+    """
+    Receives the random word and the user can try to guess it before the hang
+    """
     word = Words.objects.get(id=pk)
     p = Player.objects.get(user=2)
-    print(p.life)
-    listWord = list(word.word)
-    tam = len(listWord)
+    #print(p.life)
+    tam = len(word.word)
     blank = []
     correct = []
     for _ in range(tam):
@@ -68,14 +70,21 @@ def randomize(request, pk):
     for a in acertos:
         i = word.word.index(a.guess)
         blank[i] = a.guess
+        j = word.word.index(a.guess, i +1) # Validating for words with 2 or more equal letters
+        blank[j] = a.guess
     data = {
             "palavra": word, "blank": blank, "life": p.life, "correct": correct
         }
+    if p.life == 0 or blank == word.word:
+        p.delete() # Delete the player for another try !
+        return redirect("index")
     if request.method == 'POST':
         guess = request.POST['guess']
         if len(guess) <= 1:
             if guess in word.word:
                 Guess.objects.create(guess=guess, words=word)
+                correct.append(guess)
+                word.word.replace()
             else:
                 p.life -= 1
                 p.save()
