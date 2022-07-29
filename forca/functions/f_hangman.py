@@ -1,12 +1,20 @@
 import random
+import requests
 from faker import Faker
+from unidecode import unidecode
 
 from forca.models import Words
 
 
 def generate_db():
     """
-    Function to Generate words for the Hangman Game (Colors and States)
+    Function to Generate words for the Hangman Game
+    """
+    r = requests.get('https://api.dicionario-aberto.net/random')
+    data = r.json()
+    pal = data['word']
+    final_word = unidecode(pal)
+    Words.objects.create(word=final_word)
     """
     fake = Faker('pt_BR')
     Faker.seed(0)
@@ -15,6 +23,7 @@ def generate_db():
         state = fake.estado_nome()
         Words.objects.create(word=pal)
         Words.objects.create(word=state)
+    """
 
 def randomize_word():
     """
