@@ -58,33 +58,37 @@ def randomize(request, pk):
     """
     Receives the random word and the user can try to guess it before the hang
     """
-    word = Words.objects.get(id=pk)
+    pal = Words.objects.get(id=pk)
     p = Player.objects.get(user=2)
     #print(p.life)
-    tam = len(word.word)
+    tam = len(pal.word)
     blank = []
-    correct = []
     for _ in range(tam):
         blank.append("_")
-    acertos = Guess.objects.all()
+    acertos = Guess.objects.filter(words=pal)
     for a in acertos:
-        i = word.word.index(a.guess)
+        count = pal.word.count(a.guess)
+        i = pal.word.index(a.guess)
         blank[i] = a.guess
-        j = word.word.index(a.guess, i +1) # Validating for words with 2 or more equal letters
-        blank[j] = a.guess
+        if count > 1:
+            j = pal.word.index(a.guess, i +1) # Validating for words with 2 or more equal letters
+            blank[j] = a.guess
     data = {
-            "palavra": word, "blank": blank, "life": p.life, "correct": correct
+            "palavra": pal, "blank": blank, "life": p.life
         }
-    if p.life == 0 or blank == word.word:
+    if p.life == 0:
+        p.delete()  # Delete the player for another try !
+        messages.error(request, "Você zerou as vidas ! Tente novamente com outra palavra !", extra_tags="alert alert-damger")
+        return redirect("index")
+    elif "_" not in blank:
         p.delete() # Delete the player for another try !
+        messages.success(request, "Você venceu o jogo ! Tente novamente com outra palavra !", extra_tags="alert alert-sucess")
         return redirect("index")
     if request.method == 'POST':
         guess = request.POST['guess']
         if len(guess) <= 1:
-            if guess in word.word:
-                Guess.objects.create(guess=guess, words=word)
-                correct.append(guess)
-                word.word.replace()
+            if guess in pal.word:
+                Guess.objects.create(guess=guess, words=pal)
             else:
                 p.life -= 1
                 p.save()
@@ -93,6 +97,6 @@ def randomize(request, pk):
                 })
         else:
             messages.error(request, "Somente 1 Letra !", extra_tags="alert alert-danger")
-        return redirect(f"/jogar/regras/{word.id}")
+        return redirect(f"/jogar/regras/{pal.id}")
     return render(request, 'randomize.html', data)
 
