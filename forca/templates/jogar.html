@@ -1,0 +1,34 @@
+{% include '_head.html' %}
+{% load static %}
+</head>
+<body>
+
+{{word}} - {{w}}
+
+<div class="container">
+    {% if w == 0 %}
+        <a class="btn btn-primary" href="{% url 'generate_db' %}" type="button">Popular o Banco de Dados !</a>
+    {% endif %}
+
+
+    <h1>REGRAS:</h1>
+    <h5>
+        O jogo deve iniciar com 6 <i class="fa-solid fa-heart"></i><br>
+        O jogo deve iniciar com o estado aguardando chute.<br>
+        Todo chute deve conter apenas uma letra, caso tenha mais de uma a jogada deve ser ignorada, ou seja, não deve alterar nenhum estado.<br>
+        Caso a letra chutada esteja errada mas já foi chutada anteriormente a jogada deve ser ignorada, ou seja, não deve alterar nenhum estado.<br>
+        Se a letra chutada não estiver contida na palavra, deve subtrair uma vida <i class="fa-solid fa-heart-circle-minus"></i><br>
+        Se a letra chutada estiver contida na palavra, deve ser substituida na "palavra" em sua respectiva posição.<br>
+        Ex.: A palavra secreta é "bala" e o jogador chutou a letra "b", então a palavra que é retornada deve ser ["b", "", "", "_" ].<br>
+        Caso a quantidade de <i class="fa-solid fa-heart-crack"></i> seja 0 (zero), o estado do jogo deve mudar para perdeu.<br>
+        Caso a quantidade de <i class="fa-solid fa-heart"></i> seja maior que 0 (zero) e o jogador acerte a última letra, o estado do jogo deve mudar para ganhou.<br>
+        <!--Toda chamada ao método chutar deve registrar a letra em letrasChutadas--><br>
+    </h5>
+
+        <a type="button" class="btn btn-success" href="{% url 'randomize' palavra.id %}">Começar !</a>
+</div>
+
+
+{% include '_boot.html' %}
+</body>
+</html>

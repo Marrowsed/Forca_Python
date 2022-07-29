@@ -1,0 +1,92 @@
+{% include '_head.html' %}
+{% load static %}
+</head>
+<body>
+
+<div class="container">
+    <h1></h1>
+    <div class="container">
+{{palavra}}
+    <h1>Vidas: {{life}}</h1>
+    <h1>Palavra: {{correct}}</h1>
+    <h1>{{blank}}</h1>
+        {% if life == 0 %}
+        <h1>VOCÊ MORREU !</h1>
+        {% else %}
+            <form method="post" action="{% url 'randomize' palavra.id %}">
+        {% csrf_token %}
+        <input type="text" placeholder="Digite a Letra !" name="guess">
+        <button type="submit" class="btn btn-primary">Enter</button>
+        {% endif %}
+    </form>
+    </div>
+    <h1>Forca:</h1>
+    <canvas id="stickman" style="width: 35%"></canvas>
+</div>
+
+<script>
+window.onload = function () {
+
+  // Animate man
+  var animate = function () {
+    var drawMe = lives ;
+    drawArray[drawMe]();
+  }
+
+   // Hangman
+  canvas =  function(){
+
+    myStickman = document.getElementById("stickman");
+    context = myStickman.getContext('2d');
+    context.beginPath();
+    context.strokeStyle = "#fff";
+    context.lineWidth = 2;
+  };
+
+    head = function(){
+      myStickman = document.getElementById("stickman");
+      context = myStickman.getContext('2d');
+      context.beginPath();
+      context.arc(60, 25, 10, 0, Math.PI*2, true);
+      context.stroke();
+    }
+
+  draw = function($pathFromx, $pathFromy, $pathTox, $pathToy) {
+
+    context.moveTo($pathFromx, $pathFromy);
+    context.lineTo($pathTox, $pathToy);
+    context.stroke();
+}
+
+   torso = function() {
+     draw (60, 36, 60, 70);
+   };
+
+   rightArm = function() {
+     draw (60, 46, 100, 50);
+   };
+
+   leftArm = function() {
+     draw (60, 46, 20, 50);
+   };
+
+   rightLeg = function() {
+     draw (60, 70, 100, 100);
+   };
+
+   leftLeg = function() {
+     draw (60, 70, 20, 100);
+   };
+
+  drawArray = [rightLeg, leftLeg, rightArm, leftArm,  torso,  head];
+
+}
+
+
+
+</script>
+
+
+{% include '_boot.html' %}
+</body>
+</html>

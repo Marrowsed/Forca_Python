@@ -1,0 +1,32 @@
+{% include '_head.html' %}
+{% load static %}
+</head>
+<body>
+<div class="container mt-5 text-center">
+    <div class="row d-flex justify-content-center align-items-center">
+        <div class="col-md-8">
+            <h1 class="mt-3">Jogo da Forca !</h1>
+              <form method="post">
+                {% csrf_token %}
+                  <div class="form-outline mb-4">
+                    <label for="playerName">Digite um nome:</label>
+                    <input type="text" class="form-control" name="playerName" id="playerName" aria-describedby="nameHelp" placeholder="Digite seu nome !">
+                    <small id="nameHelp" class="form-text text-muted">Digite o nome do Jogador !</small>
+                  </div>
+                <button type="submit" class="btn btn-primary">Entrar</button>
+                </form>
+          </div>
+    </div>
+</div>
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
+
+
+{% include '_boot.html' %}
+</body>
+</html>
