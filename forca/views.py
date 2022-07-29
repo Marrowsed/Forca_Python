@@ -53,7 +53,7 @@ def generate(request):
     generate_db()
     return redirect("/jogar")
 
-
+@player_created
 def randomize(request, pk):
     """
     Receives the random word and the user can try to guess it before the hang
