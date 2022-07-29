@@ -2,7 +2,7 @@
 ![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
 ![Django](https://img.shields.io/badge/Django-092E20?style=for-the-badge&logo=django&logoColor=white)
 ![PyCharm](https://img.shields.io/badge/PyCharm-000000.svg?&style=for-the-badge&logo=PyCharm&logoColor=white)
-[![CodeQL](https://github.com/Marrowsed/controle_financeiro/actions/workflows/codeql.yml/badge.svg)](https://github.com/Marrowsed/controle_financeiro/actions/workflows/codeql.yml)
+[![CodeQL](https://github.com/Marrowsed/forca_python/actions/workflows/codeql.yml/badge.svg)](https://github.com/Marrowsed/controle_financeiro/actions/workflows/codeql.yml)
 
 # Jogo da Forca em Python ! (Hangman Game)
 
