@@ -6,10 +6,10 @@
 <div class="container">
     <h1></h1>
     <div class="container">
-{{palavra}}
+<!--{{palavra}}-->
     <h1>Vidas: {{life}}</h1>
-    <h1>Palavra: {{correct}}</h1>
-    <h1>{{blank}}</h1>
+        <h1>{{blank}}</h1>
+        {% endif %}
         {% if life == 0 %}
         <h1>VOCÊ MORREU !</h1>
         {% else %}
@@ -80,9 +80,46 @@ window.onload = function () {
 
   drawArray = [rightLeg, leftLeg, rightArm, leftArm,  torso,  head];
 
+
+  l = {{life}}
+
+switch(l) {
+    case 5:
+        head();
+        break;
+    case 4:
+        head();
+        torso();
+        break;
+    case 3:
+        head();
+        torso();
+        rightArm();
+        break;
+    case 2:
+        head();
+        torso();
+        rightArm();
+        leftArm();
+        break;
+    case 1:
+        head();
+        torso();
+        rightArm();
+        leftArm();
+        rightLeg();
+        break;
+    case 0:
+        head();
+        torso();
+        rightArm();
+        leftArm();
+        rightLeg();
+        leftLeg();
+        alert("Morreu");
+        break;
+   }
 }
-
-
 
 </script>
 

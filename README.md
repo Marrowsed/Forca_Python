@@ -32,9 +32,6 @@ pip install -r requirements.txt
   <li>Execute o comando `python manage.py migrate` para criar as tabelas do banco de dados.</li>
 </ol>
 
-#TO DO
-- Boneco da Forca aparecer automaticamente
-
 ## Rodando o projeto
 
 ```sh
