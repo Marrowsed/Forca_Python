@@ -1,5 +1,6 @@
 from .functions import *
 import random
+import re
 
 from django.contrib.auth.models import User
 from django.shortcuts import render
@@ -46,13 +47,6 @@ def jogar(request):
     return render(request, "jogar.html", data)
 
 
-def generate(request):
-    """
-    Call the function to populate the DB
-    """
-    generate_db()
-    return redirect("/jogar")
-
 @player_created
 def randomize(request, pk):
     """
@@ -60,34 +54,31 @@ def randomize(request, pk):
     """
     pal = Words.objects.get(id=pk)
     p = Player.objects.get(user=2)
-    #print(p.life)
-    tam = len(pal.word)
-    blank = []
-    for _ in range(tam):
-        blank.append("_")
-    acertos = Guess.objects.filter(words=pal)
+    pal_lower = pal.word.lower()
+    # print(p.life)
+    blank = generate_hang(pal_lower)
+    acertos = Guess.objects.filter(words=pal)  # Filter by word !
     for a in acertos:
-        count = pal.word.count(a.guess)
-        i = pal.word.index(a.guess)
-        blank[i] = a.guess
-        if count > 1:
-            j = pal.word.index(a.guess, i +1) # Validating for words with 2 or more equal letters
-            blank[j] = a.guess
+        indexes = [i.start() for i in re.finditer(a.guess, pal_lower)]  # Find all the index from the guess
+        for i in indexes:
+            blank[i] = a.guess
     data = {
-            "palavra": pal, "blank": blank, "life": p.life
-        }
+        "palavra": pal, "blank": blank, "life": p.life, "hint": hint
+    }
     if p.life == 0:
         p.delete()  # Delete the player for another try !
-        messages.error(request, "Você zerou as vidas ! Tente novamente com outra palavra !", extra_tags="alert alert-damger")
+        messages.error(request, "Você zerou as vidas ! Tente novamente com outra palavra !",
+                       extra_tags="alert alert-damger")
         return redirect("index")
     elif "_" not in blank:
-        p.delete() # Delete the player for another try !
-        messages.success(request, "Você venceu o jogo ! Tente novamente com outra palavra !", extra_tags="alert alert-sucess")
+        p.delete()  # Delete the player for another try !
+        messages.success(request, "Você venceu o jogo ! Tente novamente com outra palavra !",
+                         extra_tags="alert alert-sucess")
         return redirect("index")
     if request.method == 'POST':
         guess = request.POST['guess']
-        if len(guess) <= 1:
-            if guess in pal.word:
+        if len(guess) <= 1 and guess != " ":  # If you try to put more than a letter or a blak space
+            if guess in pal_lower:
                 Guess.objects.create(guess=guess, words=pal)
             else:
                 p.life -= 1
@@ -96,7 +87,6 @@ def randomize(request, pk):
                     "life": p.life
                 })
         else:
-            messages.error(request, "Somente 1 Letra !", extra_tags="alert alert-danger")
+            messages.error(request, "Tentativa Errada !", extra_tags="alert alert-danger")  # Error message
         return redirect(f"/jogar/regras/{pal.id}")
     return render(request, 'randomize.html', data)
-
