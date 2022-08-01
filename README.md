@@ -38,4 +38,8 @@ pip install -r requirements.txt
 python manage.py runserver
 ```
 
+## TODO
+
+Front-End mais amigável
+
 O servidor está rodando, visite http://127.0.0.1:8000/ no seu navegador de internet
