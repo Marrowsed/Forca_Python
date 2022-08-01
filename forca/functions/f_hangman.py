@@ -6,7 +6,7 @@ from unidecode import unidecode
 from forca.models import Words
 
 
-def generate_db():
+def generate_word():
     """
     Function to Generate words for the Hangman Game
     """
@@ -14,7 +14,7 @@ def generate_db():
     data = r.json()
     pal = data['word']
     final_word = unidecode(pal)
-    Words.objects.create(word=final_word)
+    return Words.objects.create(word=final_word)
     """
     fake = Faker('pt_BR')
     Faker.seed(0)
@@ -29,7 +29,21 @@ def randomize_word():
     """
     Randomize words from db
     """
-    w = Words.objects.all().count()
-    number = random.randint(w, w + w)  # From the Final Index to Index * 2
-    word = Words.objects.get(id=number)
-    return word
+    word = generate_word()
+    print(word)
+    w = Words.objects.get(word=word)
+    final_word = Words.objects.get(id=w.id)
+    print(final_word)
+    return final_word
+
+def generate_hang(word):
+    """
+    Generate the "_"
+    """
+    blank = []
+    for _ in list(word):
+        if _ == "-" or _ == " ":
+            blank.append(_)
+        else:
+            blank.append("_")
+    return blank
