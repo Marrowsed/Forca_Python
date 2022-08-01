@@ -8,8 +8,7 @@
     <div class="container">
 <!--{{palavra}}-->
     <h1>Vidas: {{life}}</h1>
-        <h1>{{blank}}</h1>
-        {% endif %}
+        <h1>{{blank | title}}</h1>
         {% if life == 0 %}
         <h1>VOCÊ MORREU !</h1>
         {% else %}
@@ -19,10 +18,19 @@
         <button type="submit" class="btn btn-primary">Enter</button>
         {% endif %}
     </form>
+    <h1>{{hint}}</h1>
     </div>
     <h1>Forca:</h1>
     <canvas id="stickman" style="width: 35%"></canvas>
 </div>
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
 
 <script>
 window.onload = function () {
