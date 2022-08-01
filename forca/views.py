@@ -63,7 +63,7 @@ def randomize(request, pk):
         for i in indexes:
             blank[i] = a.guess
     data = {
-        "palavra": pal, "blank": blank, "life": p.life, "hint": hint
+        "palavra": pal, "blank": blank, "life": p.life,
     }
     if p.life == 0:
         p.delete()  # Delete the player for another try !
